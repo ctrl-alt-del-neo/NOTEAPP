@@ -1,8 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
-import notesRoutes from "./routes/notesRoutes.js";
+import cors from "cors";
 import dotenv from "dotenv";
+
 import { connectDB } from "./config/db.js";
+import notesRoutes from "./routes/notesRoutes.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
@@ -10,6 +12,11 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 connectDB();
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 app.use(bodyParser.json());
 app.use(rateLimiter);
 app.use("/api/notes", notesRoutes);
