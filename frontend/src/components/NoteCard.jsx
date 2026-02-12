@@ -1,11 +1,18 @@
 import { PenSquareIcon, Trash2Icon } from "lucide-react";
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { formatDate } from "../lib/utils";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
 
 const NoteCard = ({ note, setNotes }) => {
+  const navigate = useNavigate();
+  const handleUpdate = (e, id) => {
+    e.preventDefault();
+    // Implement update functionality here
+    console.log("Update note with ID:", note._id);
+    navigate(`/create?edit=${id}`);
+  };
   const handleDelete = async (e, id) => {
     e.preventDefault();
     // Implement delete functionality here
@@ -34,7 +41,12 @@ const NoteCard = ({ note, setNotes }) => {
             {formatDate(new Date(note.createdAt))}
           </span>
           <div className="flex items-center gap-1">
-            <PenSquareIcon className="size-4 text-base-content/70" />
+            <button
+              className="btn btn-ghost btn-xs text-error"
+              onClick={(e) => handleUpdate(e, note._id)}
+            >
+              <PenSquareIcon className="size-4 text-base-content/70" />
+            </button>
             <button
               className="btn btn-ghost btn-xs text-error"
               onClick={(e) => handleDelete(e, note._id)}
