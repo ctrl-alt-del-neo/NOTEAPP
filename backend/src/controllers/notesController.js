@@ -26,12 +26,18 @@ export const getNoteById = async (req, res) => {
 
 export const createNote = async (req, res) => {
   try {
-    const { title, content } = req.body;
-    const newNote = new Note({ title, content });
-    const savedNote = await newNote.save();
-    res.status(201).json(savedNote);
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      { title, content },
+      { new: true, runValidators: true },
+    );
+
+    if (!updatedNote) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+    res.status(200).json(updatedNote);
   } catch (error) {
-    console.error("Error creating note:", error);
+    console.error("Error updating note:", error);
     res.status(500).json({ message: "Server Error" });
   }
 };
